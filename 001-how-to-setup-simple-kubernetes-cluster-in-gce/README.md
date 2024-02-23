@@ -44,7 +44,7 @@ sudo apt-get update
 sudo apt-get install containerd.io -y
 ```
 
-1. Install `kubeadm, kubectl, and kubelet`. For Debian
+5. Install `kubeadm, kubectl, and kubelet`. For Debian
 
 ```bash
 # Install curl and other packages
@@ -62,7 +62,7 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-1. Set IpTables [2]
+6. Set IpTables [2]
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
@@ -84,16 +84,16 @@ EOF
 sudo sysctl --system
 ```
 
-1. Verify the net_filter and overlay. The result will be like this
+7. Verify the net_filter and overlay. The result will be like this
 
-![Untitled](How%20to%20setup%20simple%20Kubernetes%20Cluster%20with%20GCE%205da7dcd3fef54886b33f11f0d719f234/Untitled.png)
+![Terminal Result](../attachments/001-terminal.png)
 
 ```bash
 lsmod | grep br_netfilter
 lsmod | grep overlay
 ```
 
-1. Verify the system variables
+8. Verify the system variables
 
 ```bash
 sudo sysctl \
@@ -102,7 +102,7 @@ net.bridge.bridge-nf-call-ip6tables \
 net.ipv4.ip_forward
 ```
 
-1. Check the cgroup that is used in the node
+9. Check the cgroup that is used in the node
 
 ```bash
 ps -p 1
@@ -111,7 +111,7 @@ ps -p 1
 # 1 ?        00:00:01 systemd
 ```
 
-1. Configure cgroup for systems driver and restart containerd [3]
+10. Configure cgroup for systems driver and restart containerd [3]
 
 ```bash
 cat <<EOT | sudo tee /etc/containerd/config.toml
@@ -122,8 +122,8 @@ EOT
 sudo systemctl restart containerd
 ```
 
-1. Do steps 2 - 9 for all nodes.
-2. Bootstrap Cluster in the master node. Save the join command in the last line of stdout [4]
+11. Do steps 2 - 9 for all nodes.
+22. Bootstrap Cluster in the master node. Save the join command in the last line of stdout [4]
 
 ```bash
 export INT_IP_ADDR="11.1.0.34"
@@ -136,7 +136,7 @@ sudo kubeadm init \
 --pod-network-cidr=$POD_CIDR
 ```
 
-1. Setup kubeconfig after cluster bootstrap finished
+13. Setup kubeconfig after cluster bootstrap finished
 
 ```bash
 mkdir -p $HOME/.kube
@@ -144,13 +144,13 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-1. Install weave-net [5]
+14. Install weave-net [5]
 
 ```bash
 kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
 ```
 
-1. Update the IP_ALLOC environment variable in weavenet daemon set the same as pod network cidr [6]
+15. Update the IP_ALLOC environment variable in weavenet daemon set the same as pod network cidr [6]
 
 ```bash
 containers:
@@ -160,14 +160,14 @@ containers:
 				value: 10.244.0.0/16
 ```
 
-1. Join the node with our master node. The command is in step 11
+16. Join the node with our master node. The command is in step 11
 
 ```bash
 sudo kubeadm join 11.1.0.30:6443 --token o7fohi.f9j4ixw4l0d41tfw \
         --discovery-token-ca-cert-hash sha256:02cf70f456300a8ce33946a6ce74d340e956ee3bfb00ad33eae867de96de5fea
 ```
 
-1. Your kubernetes cluster is ready 🥳
+17. Your kubernetes cluster is ready 🥳
 
 ## Chapter 4: Access the Kubernetes Cluster
 
