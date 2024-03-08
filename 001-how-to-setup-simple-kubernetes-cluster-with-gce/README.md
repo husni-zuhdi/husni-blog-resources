@@ -182,7 +182,7 @@ Let’s start with your control plane or master node.
             uname -r
             ```
             
-        2. Taint master node
+        2. Taint master node [7]
             
             ```bash
             kubectl taint nodes k8s-master-001 node.cilium.io/agent-not-ready=true:NoExecute
@@ -196,7 +196,7 @@ Let’s start with your control plane or master node.
             ./get_helm.sh
             ```
             
-        4. Add Cilium repository and Install Cilium CRD
+        4. Add Cilium repository and Install Cilium CRD [8]
             
             ```bash
             helm repo add cilium https://helm.cilium.io/
@@ -215,24 +215,23 @@ Let’s start with your control plane or master node.
             rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
             ```
             
-        6. (Optional) Restart unmanaged pods
+        6. Join the node with our master node. The command is in step 12
+            
+            ```bash
+            sudo kubeadm join INT_IP_ADDR:6443 --token TOKEN \
+                    --discovery-token-ca-cert-hash CA_CERT_HASH
+            ```
+            
+        7. (Optional) Restart unmanaged pods
             
             ```bash
             kubectl get pods --all-namespaces -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,HOSTNETWORK:.spec.hostNetwork --no-headers=true | grep '<none>' | awk '{print "-n "$1" "$2}' | xargs -L 1 -r kubectl delete pod
             ```
             
-        7. Start verification process
+        8. Start verification process
             
             ```bash
             cilium status
-            cilium connectivity test
-            ```
-            
-        8. Join the node with our master node. The command is in step 12
-            
-            ```bash
-            sudo kubeadm join INT_IP_ADDR:6443 --token TOKEN \
-                    --discovery-token-ca-cert-hash CA_CERT_HASH
             ```
             
 15. Your kubernetes cluster is ready 🥳
