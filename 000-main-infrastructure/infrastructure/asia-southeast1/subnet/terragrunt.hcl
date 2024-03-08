@@ -19,7 +19,7 @@ locals {
 inputs = {
   project         = local.project_id
   vpc_name        = dependency.vpc.outputs.network_name
-  subnet_name     = "${local.region}-${local.resource_name}"
+  subnet_name     = "${dependency.vpc.outputs.network_name}-${local.region}-${local.resource_name}"
   subnet_region   = local.region
-  subnet_ip_range = "11.1.0.0/16"
+  subnet_ip_range = "13.1.0.0/16"
 }
