@@ -18,7 +18,7 @@ locals {
 
 inputs = {
   project = "${local.project_id}"
-  name    = "${local.resource_name}-${local.region}"
+  name    = "${dependency.vpc.outputs.network_name}-${local.resource_name}-${local.region}"
   region  = "${local.region}"
   network = dependency.vpc.outputs.network_name
   nats = [{

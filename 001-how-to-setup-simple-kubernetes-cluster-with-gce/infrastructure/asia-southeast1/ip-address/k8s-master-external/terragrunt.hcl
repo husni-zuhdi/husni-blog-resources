@@ -21,5 +21,5 @@ inputs = {
   project_id   = local.project_id
   region       = local.region
   address_type = "EXTERNAL"
-  names        = ["${local.base_name}-${local.resource_name}"]
+  names        = ["${local.base_name}-${local.resource_name}-001"]
 }

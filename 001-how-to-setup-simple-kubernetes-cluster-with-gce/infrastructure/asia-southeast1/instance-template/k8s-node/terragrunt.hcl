@@ -20,7 +20,7 @@ locals {
 inputs = {
   project_id           = local.project_id
   region               = local.region
-  name_prefix          = "${local.base_name}-${local.resource_name}"
+  name_prefix          = "${local.base_name}-${local.resource_name}-001"
   machine_type         = "e2-medium"
   subnetwork           = dependency.subnetwork.outputs.self_link
   disk_size_gb         = 10

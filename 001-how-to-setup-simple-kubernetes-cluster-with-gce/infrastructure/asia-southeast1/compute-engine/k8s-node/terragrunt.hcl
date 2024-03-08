@@ -24,7 +24,7 @@ locals {
 inputs = {
   project_id        = local.project_id
   zone              = "${local.region}-c"
-  hostname          = local.base_name
+  hostname          = "${local.base_name}-001"
   instance_template = dependency.instance_template.outputs.self_link
-  num_instances     = 0
+  num_instances     = 2
 }
