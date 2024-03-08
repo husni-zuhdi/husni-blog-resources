@@ -15,8 +15,7 @@ dependency "asia-southeast1-subnet" {
 }
 
 locals {
-  project_id    = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.project_id
-  region        = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.region
+  project_id    = read_terragrunt_config(find_in_parent_folders("terragrunt.hcl")).locals.project_id
   base_name     = "${basename(get_terragrunt_dir())}"
   firewall_name = "${local.base_name}-fw"
 }
@@ -30,7 +29,6 @@ inputs = {
     priority    = null
     source_ranges = [
       dependency.asia-southeast1-subnet.outputs.ip_range,
-      dependency.asia-southeast2-subnet.outputs.ip_range
     ]
     source_tags             = null
     source_service_accounts = null
