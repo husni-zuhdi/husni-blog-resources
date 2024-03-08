@@ -8,4 +8,4 @@ My technical blog resources repository. Feel free to checking
 * [gcloud cli](https://cloud.google.com/sdk/gcloud)
 
 ## Articles
-* [How to Setup Simple Kubernetes Cluster in GCE](./001-how-to-setup-simple-kubernetes-cluster-in-gce/README.md)
+* [How to Setup Simple Kubernetes Cluster with GCE](./001-how-to-setup-simple-kubernetes-cluster-with-gce/README.md)
