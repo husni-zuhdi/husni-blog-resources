@@ -162,10 +162,10 @@ Let’s start with your control plane or master node.
             
             ```bash
             containers:
-            	- name: weave
-            		env:
-            			- name: IPALLOC_RANGE
-            				value: 10.244.0.0/16
+              - name: weave
+                env:
+                - name: IPALLOC_RANGE
+                  value: 10.244.0.0/16
             ```
             
         2. Join the node with our master node. The command is in step 12
@@ -231,15 +231,22 @@ Let’s start with your control plane or master node.
         8. Join the node with our master node. The command is in step 12
             
             ```bash
-            sudo kubeadm join 11.1.0.30:6443 --token o7fohi.f9j4ixw4l0d41tfw \
-                    --discovery-token-ca-cert-hash sha256:02cf70f456300a8ce33946a6ce74d340e956ee3bfb00ad33eae867de96de5fea
+            sudo kubeadm join INT_IP_ADDR:6443 --token TOKEN \
+                    --discovery-token-ca-cert-hash CA_CERT_HASH
             ```
             
 15. Your kubernetes cluster is ready 🥳
 
 ## Chapter 4: Access the Kubernetes Cluster
 
-After you kubernetes cluster is ready, you can get your kubeconfig file in `~/.kube/config` file. Copy that config file and you can access your kubernetes cluster from you local device.
+After you kubernetes cluster is ready, you can get your kubeconfig file in `~/.kube/config` file.
+Copy that config file and you can access your kubernetes cluster from you local device.
+Don't forget to change the internal control plane IP to the external one.
+```bash
+--  server: https://CONTROL_PLANE_INTERNAL_IP:6443
+++  server: https://CONTROL_PLANE_EXTERNAL_IP:6443
+
+```
 
 ## References
 
