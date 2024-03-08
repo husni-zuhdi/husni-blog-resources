@@ -7,7 +7,7 @@ include "root" {
 }
 
 dependency "vpc" {
-  config_path = "../../vpc/husni-blog-resources"
+  config_path = "../../../../../000-main-infrastructure/infrastructure/global/vpc/husni-blog-resources"
 }
 
 locals {
@@ -21,16 +21,16 @@ inputs = {
   network_name = dependency.vpc.outputs.network_name
   ingress_rules = [{
     name                    = local.firewall_name
-    description             = "Allow SSH from GCP IAP"
+    description             = "Allow access to k8s master apiserver from public"
     priority                = null
-    source_ranges           = ["35.235.240.0/20"]
+    source_ranges           = ["0.0.0.0/0"]
     source_tags             = null
     source_service_accounts = null
-    target_tags             = null
+    target_tags             = ["k8s-master"]
     target_service_accounts = null
     allow = [{
       protocol = "tcp"
-      ports    = ["22"]
+      ports    = ["6443"]
     }]
   }]
 }

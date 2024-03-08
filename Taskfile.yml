@@ -1,0 +1,59 @@
+version: '3'
+
+vars:
+  GIT_ROOT:
+    sh: git rev-parse --show-toplevel
+
+env:
+  TERRAGRUNT_DOWNLOAD: "{{.GIT_ROOT}}/.terra-cache"
+  TF_PLUGIN_CACHE_DIR: "{{.GIT_ROOT}}/.terra-cache"
+
+tasks:
+  # Internal tasks
+  check-cache-dir:
+    summary: Check if there any root cache folder. If not, it will create a new one.
+    internal: true
+    cmds:
+      - if [ ! -d "$TERRAGRUNT_DOWNLOAD" ]; then mkdir -p $TERRAGRUNT_DOWNLOAD; fi
+  fmt:
+    summary: Format a terragrunt manifest.
+    internal: true
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt hclfmt
+
+  # Terragrunt tasks
+  output:
+    deps: [check-cache-dir]
+    summary: Display terragrunt output from a manifest.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt output -json
+  plan:
+    deps: [check-cache-dir, fmt]
+    summary: Plan a terragrunt manifest.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt plan
+  apply:
+    deps: [check-cache-dir, fmt]
+    summary: Apply a terragrunt manifest and wil ask confirmation to proceed or not.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt apply
+  destroy:
+    deps: [check-cache-dir]
+    summary: Destroy a terragrunt manifest and wil ask confirmation to proceed or not.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt destroy
+  plan-all:
+    deps: [check-cache-dir, fmt]
+    summary: Plan terragrunt manifests in all subfolders.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt run-all plan
+  apply-all:
+    deps: [check-cache-dir, fmt]
+    summary: Apply a terragrunt manifests in all subfolders.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt run-all apply
+  destroy-all:
+    deps: [check-cache-dir]
+    summary: Destroy a terragrunt manifests in all subfolders.
+    cmds:
+      - cd {{.CLI_ARGS}} && terragrunt run-all destroy
