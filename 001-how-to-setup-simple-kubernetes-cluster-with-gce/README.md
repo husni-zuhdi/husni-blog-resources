@@ -16,7 +16,19 @@ We’ll start with the tools needed to spin up a minimal Kubernetes cluster. I w
 
 ## Chapter 2: Prepare Infrastructure Resources
 
-To setup the infrastructure resources, we’ll use `terrafrom` and `terragrunt` as our Infrastructure as Code tool. You can see the code repository in [here](./infrastructure).
+To setup the infrastructure resources, we’ll use `terrafrom` and `terragrunt` masked as `task` subcommand as our Infrastructure as Code tool. You can see the code repository in [here](./infrastructure).
+
+Before applying infra resources in this folder, please read [000-main-infrastructure](./../000-main-infrastructure/README.md).
+
+Task subcommand you'll need to execute:
+```bash
+# Plan or Dry run all terraform manifest
+task plan-all -- 001-how-to-setup-simple-kubernetes-cluster-with-gce/infrastructure
+# Apply all terraform manifest. Will create all infra resources
+task apply-all -- 001-how-to-setup-simple-kubernetes-cluster-with-gce/infrastructure
+# Destroy all infra resources. Will delete all resource. Use with cautions!
+task destroy-all -- 001-how-to-setup-simple-kubernetes-cluster-with-gce/infrastructure
+```
 
 ## Chapter 3: Bootstrap Kubernetes Cluster
 
@@ -151,7 +163,7 @@ Let’s start with your control plane or master node.
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
     
-14. Install Cilium or Weave-Net (Deprecated) as CNI
+14. Install Cilium or Weave-Net (Deprecated) as CNI from master node
     1. Install Weave-Net (Deprecated) [5]
         
         ```bash
@@ -168,11 +180,11 @@ Let’s start with your control plane or master node.
                   value: 10.244.0.0/16
             ```
             
-        2. Join the node with our master node. The command is in step 12
+        2. Join the other node with our master node. The command is in step 12 stdout
             
             ```bash
-            sudo kubeadm join 11.1.0.30:6443 --token o7fohi.f9j4ixw4l0d41tfw \
-                    --discovery-token-ca-cert-hash sha256:02cf70f456300a8ce33946a6ce74d340e956ee3bfb00ad33eae867de96de5fea
+            sudo kubeadm join INT_IP_ADDR:6443 --token TOKEN \
+                    --discovery-token-ca-cert-hash CA_CERT_HASH
             ```
             
     2. Install Cilium with helm
@@ -215,7 +227,7 @@ Let’s start with your control plane or master node.
             rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
             ```
             
-        6. Join the node with our master node. The command is in step 12
+        6. Join the other node with our master node. The command is in step 12 stdout
             
             ```bash
             sudo kubeadm join INT_IP_ADDR:6443 --token TOKEN \
