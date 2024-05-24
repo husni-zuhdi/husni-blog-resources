@@ -9,6 +9,7 @@ My technical blog resources repository. Feel free to read 📖
 
 ## Articles
 * [How to Setup Simple Kubernetes Cluster with GCE](./001-how-to-setup-simple-kubernetes-cluster-with-gce/README.md)
+* [CI/CD pipeline with Github Action](./002-devops-dojo-cicd-with-github-action/README.md)
 
 ## Usage
 1. Make sure to change `locals` section in [terragrunt.hcl](./terragrunt.hcl) with your Googe Cloud Storage Bucket.
