@@ -1,0 +1,59 @@
+name: Rust Test
+
+on:
+  push:
+    tags:
+      - **
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run Build
+      run: |
+        cd ./../002-devops-dojo-cicd-with-github-action/api/ && cargo build --release --verbose
+
+name: Build and Push Rust
+# create simple trigger based on everytime we create new tag in this repository
+on:
+  push:
+    tags:
+      # Push events to every tag including hierarchical tags like v1.0/beta
+      - "**"
+
+jobs:
+  BuildPush:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Setup Environment Variables
+        run: |-
+          echo "TAG_NAME=${{ github.ref_name }}" >> "$GITHUB_ENV"
+          echo "BLOG_NUM=$(echo ${{ github.ref_name }} | cut -d "/" -f1)" >> "$GITHUB_ENV"
+          echo "BLOG_VERSION=$(echo ${{ github.ref_name}} | cut -d "/" -f2)" >> "$GITHUB_ENV"
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Login to GCR
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          export_default_credentials: true
+          
+      - name: Build Docker Image
+        run: |-
+          cd ../002-devops-dojo-cicd-with-github-action/api
+          docker build -t husni-blog-$BLOG_NUM:$BLOG_VERSION -f ./Dockerfile .
+        
+      - name: Configure Docker Client
+        run: gcloud auth configure-docker --quiet
+        
+      - name: Push Docker Image to Google Container/Artifact Registry
+        run: |-
+          docker tag husni-blog-$BLOG_NUM:$BLOG_VERSION gcr.io/$GCP_PROJECT/husni-blog-$BLOG_NAME:$BLOG_VERSION
+          docker push gcr.io/$GCP_PROJECT/husni-blog-$BLOG_NUM:$BLOG_VERSION 
