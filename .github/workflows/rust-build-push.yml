@@ -47,7 +47,7 @@ jobs:
           
       - name: Build Docker Image
         run: |-
-          cd ../002-devops-dojo-cicd-with-github-action/api
+          cd ./002-devops-dojo-cicd-with-github-action/api
           docker build -t husni-blog-$BLOG_NUM:$BLOG_VERSION -f ./Dockerfile .
         
       - name: Configure Docker Client
