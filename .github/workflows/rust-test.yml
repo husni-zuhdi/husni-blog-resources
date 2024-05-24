@@ -1,0 +1,12 @@
+name: Rust Unit Test
+on: [push]
+jobs:
+  rust-unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+      - name: Start Unit Test
+        run: cd ./002-devops-dojo-cicd-with-github-action/api && cargo test
