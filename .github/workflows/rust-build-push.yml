@@ -1,4 +1,4 @@
-name: Build and Push Rust
+name: Rust Build and Push
 # create simple trigger based on everytime we create new tag in this repository
 on:
   push:
@@ -39,5 +39,5 @@ jobs:
         
       - name: Push Docker Image to Google Container/Artifact Registry
         run: |-
-          docker tag husni-blog-$BLOG_NUM:$BLOG_VERSION gcr.io/$GCP_PROJECT/husni-blog-$BLOG_NAME:$BLOG_VERSION
+          docker tag husni-blog-$BLOG_NUM:$BLOG_VERSION gcr.io/$GCP_PROJECT/husni-blog-$BLOG_NUM:$BLOG_VERSION
           docker push gcr.io/$GCP_PROJECT/husni-blog-$BLOG_NUM:$BLOG_VERSION 
