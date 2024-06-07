@@ -10,7 +10,7 @@ on:
 env:
   tf_version: '1.5.0'
   tg_version: '0.48.0'
-  working_dir: './002-devops-dojo-cicd-with-github-action/infrastructure/global/firewall-rule/allow-http-dev-from-external/'
+  working_dir: './002-devops-dojo-cicd-with-github-action/infrastructure/asia-southeast1/compute-engine/husni-blog-002/'
 
 jobs:
   checks:
@@ -60,6 +60,6 @@ jobs:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
           tg_dir: ${{ env.working_dir }}
-          tg_command: 'apply'
+          tg_command: 'apply-all'
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
