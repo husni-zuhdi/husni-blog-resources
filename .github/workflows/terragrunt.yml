@@ -10,7 +10,7 @@ on:
 env:
   tf_version: '1.5.0'
   tg_version: '0.48.0'
-  working_dir: './002-devops-dojo-cicd-with-github-action/infrastructure/asia-southeast1/ip-address/husni-blog-002-external/'
+  working_dir: './002-devops-dojo-cicd-with-github-action/infrastructure/global/firewall-rule/allow-http-dev-from-external/'
 
 jobs:
   checks:
