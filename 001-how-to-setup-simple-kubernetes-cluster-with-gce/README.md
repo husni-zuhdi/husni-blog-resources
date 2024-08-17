@@ -105,7 +105,7 @@ Let’s start with your control plane or master node.
     
 7. Verify the net_filter and overlay. The result will be like this
     
-    ![Terminal Result](../attachments/001-terminal.png)
+    ![Terminal Result](./../attachments/001-terminal.png)
     
     ```bash
     lsmod | grep br_netfilter
