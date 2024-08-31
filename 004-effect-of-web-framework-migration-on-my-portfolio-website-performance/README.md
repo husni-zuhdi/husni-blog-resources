@@ -1,16 +1,7 @@
----
-tags:
-  - write-list
-  - rust
-  - software-engineering
-  - performance
-  - testing
-Status: Done
----
 # Effect of web framework migration on my portfolio website performance
 ## ⛰ Background
 
-In my previous blog about portfolio website migration ([github]() or [portfolio]()) I shared my web framework migration process. It was a smooth process to migrate from `actix-web` to the `axum` web framework. I also describe the reasons for the migration which are:
+In my previous blog about portfolio website migration ([github](https://github.com/husni-zuhdi/husni-blog-resources/tree/main/003-migrate-my-portfolio-website-from-actix-web-to-axum) or [portfolio](https://husni-zuhdi.com/blogs/003-g)) I shared my web framework migration process. It was a smooth process to migrate from `actix-web` to the `axum` web framework. I also describe the reasons for the migration which are:
 - Trimming `husni-portfolio` dependencies
 - Increase website performance
 
@@ -21,9 +12,9 @@ From the first website, I can find facts that:
 - On p99 latency, `warp` leads on `4.83ms` followed by `axum` on `5.31ms` then for `actix` it's `8.58ms`. The p90 gives the same result.
 
 From the second website, I found this nice comparison:
-- `actix-web` has high throughput but high max latency. ![actix-web performance](../../Assets/actix_web_performance.png)
-- `axum` is more moderate RPS, has quite a low max latency (based on my gut feeling), and has the lowest max memory usage. ![axum performance](../../Assets/axum_performance.png)
-- `warp` has the lowest max latency among these three but also the lowest throughput. ![warp performance](../../Assets/warp_performance.png)
+- `actix-web` has high throughput but high max latency. ![actix-web performance](../attachments/004_actix_web_performance.png)
+- `axum` is more moderate RPS, has quite a low max latency (based on my gut feeling), and has the lowest max memory usage. ![axum performance](../attachments/004_axum_performance.png)
+- `warp` has the lowest max latency among these three but also the lowest throughput. ![warp performance](../attachments/004_warp_performance.png)
 
 I want my portfolio website to be fast and lightweight. I don't expect to have a huge request coming to my website except for ThePrimagen to read my blogs or someone DDOS my website. So moderate throughput and low latency are good to have. I also don't want my website to be memory-hungry since I want to press my infra cost as much as possible. Low memory usage is nice to have. Last, I choose `axum` instead of `warp` because `axum` has a more mature ecosystem with twice the Github Stargazer on their repo.
 
@@ -218,7 +209,7 @@ Based on the `My facial expression` column you can imagine my feeling on the tes
 
 Now I know that the issue is not on the application side. It's either on infrastructure or my testing methodology. So I traced back my cloud run [terragrunt](https://terragrunt.gruntwork.io/) manifest in my private repo to the actual applied infrastructure configuration in Google Cloud Console. But I can't find anything suspicious. Then I checked my Cloud Run metrics dashboard again because the `[P] Average Response Time` value with any latencies values doesn't match. There must be something wrong with the metrics dashboard, I presume. Then I found this.
 
-![The culprit](../../Assets/husni_portfolio_test_culprit.png)
+![The culprit](../attachments/004_husni_portfolio_test_culprit.png)
 
 Turns out, during the high latencies event there is no active container in Cloud Run. I suspect that the high latencies were attributed to the container startup time. These high latencies also happened outside the performance test time range as you can see in the Request count metric panel above. The test started between `20:08-20:09` but the high latency event happened a minute before the test. We can learn two things at least from this finding
 
