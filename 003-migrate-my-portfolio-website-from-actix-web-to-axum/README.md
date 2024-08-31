@@ -3,7 +3,7 @@
 
 I started to take care of my portfolio project again after abandoning it for 2 months. My main reason is that I want to make something that has real usage (even though I don't have real traffic right away). One of the reasons is that I want to write codes.
 
-![My portfolio website activity](../attachments/003_husni_portfolio_commit_over_time.png)
+![My portfolio website activity](./../attachments/003_husni_portfolio_commit_over_time.png)
 
 During the brainstorming phase, I want to have a feature to pull data from my github repository. I have a [husni-blog-resources](https://github.com/husni-zuhdi/husni-blog-resources) repository consisting of my writing about technical stuff (mostly related to Infrastructure as a Code and Site Reliability Engineering). In this website, I have a `Blogs` page to show my blog. I don't want to waste my time copy-paste my articles. So, why not create a feature to pull all my writings from that repo and render them on my portfolio website? That seems doable.
 
@@ -161,18 +161,18 @@ axum::serve(listener, app).await.unwrap();
 
 In conclusion, the migration process is quite straightforward and not difficult. With this web framework migration, I can trim my dependencies count from `292` to `218`.
 
-![Dependencies with actix-web](../attachments/003_husni_portfolio_actix_web_dep_count.png)
+![Dependencies with actix-web](./../attachments/003_husni_portfolio_actix_web_dep_count.png)
 
-![Dependencies with axum](../attachments/003_husni_portfolio_axum_dep_count.png)
+![Dependencies with axum](./../attachments/003_husni_portfolio_axum_dep_count.png)
 
 The build duration also decreased by `40s` from `2m 28s` to `1m 49s`.
 
-![Build time actix-web](../attachments/003_husni_portfolio_actix_web_build_dur.png)
+![Build time actix-web](./../attachments/003_husni_portfolio_actix_web_build_dur.png)
 
-![Build time axum](../attachments/003_husni_portfolio_axum_build_dur.png)
+![Build time axum](./../attachments/003_husni_portfolio_axum_build_dur.png)
 
 Aside from all the upsides I write above, the only bug I encountered after migrating to `axum` is there is a blink appearing during a transition from one page to another. It's just a minor bug and I'll be working on that later.
 
-![Blink bug](../attachments/003_husni_portfolio_blink.gif)
+![Blink bug](./../attachments/003_husni_portfolio_blink.gif)
 
 I'll share my migration story from the application performance side later. Please wait for the next blog. Thanks for reading.
