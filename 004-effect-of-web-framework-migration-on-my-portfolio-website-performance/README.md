@@ -181,31 +181,31 @@ We are going to compare test results between the pre-migration version to the po
 
 Here is the *first* test result (P for postman, CR for cloud run)
 
-| Metric                    | Control<br>(actix-web) | Test #1<br>(axum) | Difference | My facial expression         |
-| ------------------------- | ---------------------- | ----------------- | ---------- | ---------------------------- |
-| (P) Duration              | 8m 39s                 | 4m 27s            | -48.5%     | 😁                           |
-| (P) Average Response Time | 93ms                   | 43s               | -53.7%     | 😁                           |
-| (CR) Request Count        | 11.32rps               | 18.67rps          | +64.9%     | 🤩                           |
-| (CR) Request Latency p99  | 141.46ms               | 252.92ms          | +78.7%     | 😧 wtf                       |
-| (CR) Request Latency p90  | 55.35ms                | 242.7ms           | +338.4%    | 😭 WTF?                      |
-| (CR) Request Latency p50  | 5.38ms                 | 64.22ms           | +1093.6%   | 😱 WTF??!!!                  |
-| (CR) CPU Utilization p99  | 12.99%                 | 32.98%            | +153.9%    | 😢 what happened to latency? |
-| (CR) CPU Memory p99       | 10.99%                 | 19.98%            | +81.8%     | 😢 what happened to latency? |
-| (CR) Max Send Bytes       | 124.24k/s              | 209.85k/s         | +68%       | 😢 what happened to latency? |
+| Metric                    | Control(actix-web) | Test #1(axum) | Difference | My facial expression         |
+| ------------------------- | ------------------ | ------------- | ---------- | ---------------------------- |
+| (P) Duration              | 8m 39s             | 4m 27s        | -48.5%     | 😁                           |
+| (P) Average Response Time | 93ms               | 43s           | -53.7%     | 😁                           |
+| (CR) Request Count        | 11.32rps           | 18.67rps      | +64.9%     | 🤩                           |
+| (CR) Request Latency p99  | 141.46ms           | 252.92ms      | +78.7%     | 😧 wtf                       |
+| (CR) Request Latency p90  | 55.35ms            | 242.7ms       | +338.4%    | 😭 WTF?                      |
+| (CR) Request Latency p50  | 5.38ms             | 64.22ms       | +1093.6%   | 😱 WTF??!!!                  |
+| (CR) CPU Utilization p99  | 12.99%             | 32.98%        | +153.9%    | 😢 what happened to latency? |
+| (CR) CPU Memory p99       | 10.99%             | 19.98%        | +81.8%     | 😢 what happened to latency? |
+| (CR) Max Send Bytes       | 124.24k/s          | 209.85k/s     | +68%       | 😢 what happened to latency? |
 
 Based on the `My facial expression` column you can imagine my feeling on the test result above. I didn't expect to have such high latencies after migrating to `axum` and here we are. This latency anomaly kept me puzzled for quite some time. Then after checking all config and data, I choose to do the second test. Here is the result
 
-| Metric                    | Control<br>(actix-web) | Test #2<br>(axum) | Difference | My facial expression |
-| ------------------------- | ---------------------- | ----------------- | ---------- | -------------------- |
-| (P) Duration              | 8m 39s                 | 5m 04s            | -41.4%     | 🙏 please be good    |
-| (P) Average Response Time | 93ms                   | 50s               | -46.2%     | 🙏 please be good    |
-| (CR) Request Count        | 11.32rps               | 18.1rps           | +59.9%     | 🙏 please be good    |
-| (CR) Request Latency p99  | 141.46ms               | 9.97ms            | -93.0%     | 🤩                   |
-| (CR) Request Latency p90  | 55.35ms                | 9.57ms            | -82.7%     | 🤩                   |
-| (CR) Request Latency p50  | 5.38ms                 | 5.04ms            | -6.3%      | 🤩                   |
-| (CR) CPU Utilization p99  | 12.99%                 | 21.99%            | +69.3%     | 🤩                   |
-| (CR) CPU Memory p99       | 10.99%                 | 10.99%            | -          | 🤩                   |
-| (CR) Max Send Bytes       | 124.24k/s              | 197.38k/s         | +58.9%     | 🤩                   |
+| Metric                    | Control(actix-web) | Test #2(axum) | Difference | My facial expression |
+| ------------------------- | ------------------ | ------------- | ---------- | -------------------- |
+| (P) Duration              | 8m 39s             | 5m 04s        | -41.4%     | 🙏 please be good    |
+| (P) Average Response Time | 93ms               | 50s           | -46.2%     | 🙏 please be good    |
+| (CR) Request Count        | 11.32rps           | 18.1rps       | +59.9%     | 🙏 please be good    |
+| (CR) Request Latency p99  | 141.46ms           | 9.97ms        | -93.0%     | 🤩                   |
+| (CR) Request Latency p90  | 55.35ms            | 9.57ms        | -82.7%     | 🤩                   |
+| (CR) Request Latency p50  | 5.38ms             | 5.04ms        | -6.3%      | 🤩                   |
+| (CR) CPU Utilization p99  | 12.99%             | 21.99%        | +69.3%     | 🤩                   |
+| (CR) CPU Memory p99       | 10.99%             | 10.99%        | -          | 🤩                   |
+| (CR) Max Send Bytes       | 124.24k/s          | 197.38k/s     | +58.9%     | 🤩                   |
 
 Now I know that the issue is not on the application side. It's either on infrastructure or my testing methodology. So I traced back my cloud run [terragrunt](https://terragrunt.gruntwork.io/) manifest in my private repo to the actual applied infrastructure configuration in Google Cloud Console. But I can't find anything suspicious. Then I checked my Cloud Run metrics dashboard again because the `[P] Average Response Time` value with any latencies values doesn't match. There must be something wrong with the metrics dashboard, I presume. Then I found this.
 
